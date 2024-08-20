@@ -1,17 +1,10 @@
-
-
 const express = require("express");
+const { login, signup } = require("../controllers/authController");
 
 const router = express.Router();
 
-router.get('/hello', (req, res)=>{
-    res.json({
-         message: "Hello",
-         name: "Souvik",
-    })
-})
-
-
+router.post('/login', login);
+router.post('/signup', signup);
 module.exports = router;
 
 
