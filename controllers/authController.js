@@ -5,18 +5,22 @@ const bcrypt = require("bcrypt");
 const signup = async (req, res) => {
     const { username, email, password, accountType } = req.body;
     try {
-        let user = await User.findOne({ username: username });
-        if(user){
-            return res.status(400).json({success: false, message: "Username already in use"});
+        let user = await User.findOne({ username });
+        if (user) {
+            return res.status(400).json({ success: false, message: "Username already in use" });
         }
         const securePassword = await bcrypt.hash(password, 10);
 
-        user  = new User({
+        user = new User({
             username,
             email,
             password: securePassword,
             accountType,
         })
+
+        await user.save();
+
+        return res.status(201).json({ success: true, message: "new user created successfully" })
     } catch (err) {
         return res.status(500).json({ success: false, message: err.message });
     }
