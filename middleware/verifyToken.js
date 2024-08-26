@@ -10,9 +10,9 @@ const verifyToken = async (req, res, next) => {
     }
 
     try {
-        jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (error, user)=>{
-            if(error){
-                return res.status(403).json({success: false, message: "Forbidden"})
+        jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (error, user) => {
+            if (error) {
+                return res.status(403).json({ success: false, message: "Forbidden" })
             }
 
             req.id = user.id;
@@ -28,3 +28,5 @@ const verifyToken = async (req, res, next) => {
     }
 
 }
+
+module.exports = { verifyToken };
