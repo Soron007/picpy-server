@@ -67,4 +67,47 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = { login, signup };
+const refreshToken = async(req, res) => {
+  const refreshTokenForThisRequest = req.headers.authorization?.split(" ")[1];
+
+  if(!refreshTokenForThisRequest) {
+    return res.status(401).json({success: false, message: "Unauthorized, Please login!"});
+  }
+
+  try {
+    jwt.verify(refreshTokenForThisRequest, process.env.REFRESH_TOKEN_SECRET, (err, user)=> {
+    if(err) return res.status(403).json({success: false, message: err.message})
+
+      const accessToken = generateAccessToken({
+        id: user.id,
+        message: "new access token",
+        accountType: user.accountType,
+        author: user.author,
+      });
+
+      const refreshToken = generateRefreshToken({
+        id: user.id,
+        message: "new refresh token",
+        accountType: user.accountType,
+        author: user.author,
+
+      });
+
+      return res.status(200).json({
+        success: true,
+        message: "Token refreshed successfully",
+        accessToken,
+        refreshToken, 
+        role: user.accountType,
+        author: user.author,
+      });
+    });     
+    
+  } catch (error) {
+    console.log(error);
+    res.status(403).json({success: false, message: "Invalid refresh token"});
+  }
+}
+
+
+module.exports = { login, signup, refreshToken };
