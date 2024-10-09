@@ -18,10 +18,10 @@ const port = process.env.PORT || 5000;
 
 connectDb();
 // Making routes
-app.use(cors());
+app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
 app.use(express.json());
 app.get("/", (req, res) => {
-    res.send("<center><h1>Server Running Dudes...</h1></center>");
+  res.send("<center><h1>Server Running Dudes...</h1></center>");
 });
 
 // How to use routes
@@ -29,7 +29,7 @@ app.get("/", (req, res) => {
 
 // importing and using routes dyanmically
 readdirSync("./routes").map((route) =>
-    app.use("/api", require(`./routes/${route}`))
+  app.use("/api", require(`./routes/${route}`))
 );
 // console.log(readdirSync("./routes"))
 
@@ -41,5 +41,5 @@ readdirSync("./routes").map((route) =>
 
 // Server ko listen karna hoga
 app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+  console.log(`Server is running on port ${port}`);
 });
