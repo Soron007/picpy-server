@@ -1,5 +1,5 @@
 const Order = require("../models/Order");
-const order = require("../models/Order");
+
 
 const getOrders = async (req, res) => {
     const authorId = req.id;
